@@ -5,7 +5,7 @@ def sumNum(string):
     n = len(lst)
     for num in lst:
         total += int(num)
-    print(str(total / n))
+    #print(str(total / n))
     return total / n
 
 
@@ -32,7 +32,7 @@ def generateInsert(table, values):
 
     # To remove last comma
     string = string[:-1]
-    print('INSERT INTO {} VALUES({});'.format(table, string))
+    #print('INSERT INTO {} VALUES({});'.format(table, string))
     return 'INSERT INTO {} VALUES({});'.format(table, string)
 
 
