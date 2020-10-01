@@ -1,5 +1,4 @@
 import sqlite3
-import pandas as pd
 
 createtbl = """
 CREATE TABLE Animal
@@ -29,18 +28,54 @@ inserts = ["INSERT INTO Animal VALUES(1, 'Galapagos Penguin', 'exotic', 0.5);",
 
 conn = sqlite3.connect('dsc450.db') # open the connection
 cursor = conn.cursor()
-
+# conn.execute('DROP TABLE ANIMAL;')
 cursor.execute(createtbl)   # create the Animal table
-for ins in inserts:         # insert the rows
-    cursor.execute(ins)
+# for ins in inserts:         # insert the rows
+#     cursor.execute(ins)
 
 conn.commit()   # finalize inserted data
 conn.close()    # close the connection
 
-def queryToCsv(query):
+
+def queryToTxt(query):
     conn = sqlite3.connect('dsc450.db')
     cursor = conn.cursor()
-    result = conn.execute(query)
+    result = cursor.execute(query)
+    resultTxt = str(result.fetchall())
+    conn.commit()
+    conn.close()
+    resultTxt = resultTxt.replace('), (', '),  (')
+    # print(resultTxt)
+    resultVals = resultTxt.split(',  ')
+    f = open('animal.txt', 'w')
+    for i in resultVals:
+        if i[0] == '[':
+            i = i[1:]
+            f.write(i + '\n')
+        elif i[-1] == ']':
+            i = i[:-1]
+            f.write(i + '\n')
+        else:
+            f.write(i + '\n')
+    f.close()
+    return
 
-    print(result.fetchone())
-    print(type(result.fetchone()))
+queryToTxt('SELECT * FROM ANIMAL;')
+
+
+def txtToTable(txt):
+    f = open(txt, 'r')
+    valueList = []
+    for i in f.readlines():
+        valueList.append(eval(i))
+
+    conn = sqlite3.connect('dsc450.db')
+    cursor = conn.cursor()
+    insert = 'INSERT INTO ANIMAL VALUES(?, ?, ?, ?);'
+    cursor.executemany(insert, valueList)
+    conn.commit()
+    count = cursor.execute('SELECT count(*) FROM ANIMAL;')
+    print(count.fetchall())
+    conn.close()
+
+txtToTable('animal.txt')
