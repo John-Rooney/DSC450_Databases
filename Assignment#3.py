@@ -26,18 +26,19 @@ inserts = ["INSERT INTO Animal VALUES(1, 'Galapagos Penguin', 'exotic', 0.5);",
            "INSERT INTO Animal VALUES(10, 'Alpaca', 'common', 0.25);",
            "INSERT INTO Animal VALUES(11, 'Llama', NULL, 3.5);"]
 
-conn = sqlite3.connect('dsc450.db') # open the connection
+conn = sqlite3.connect('dsc450.db')  # open the connection
 cursor = conn.cursor()
 # conn.execute('DROP TABLE ANIMAL;')
-cursor.execute(createtbl)   # create the Animal table
+cursor.execute(createtbl)  # create the Animal table
 # for ins in inserts:         # insert the rows
 #     cursor.execute(ins)
 
-conn.commit()   # finalize inserted data
-conn.close()    # close the connection
+conn.commit()  # finalize inserted data
+conn.close()  # close the connection
 
 
 def queryToTxt(query):
+    """Creates txt file with results (in tuple form) of SQL query"""
     conn = sqlite3.connect('dsc450.db')
     cursor = conn.cursor()
     result = cursor.execute(query)
@@ -60,10 +61,11 @@ def queryToTxt(query):
     f.close()
     return
 
-queryToTxt('SELECT * FROM ANIMAL;')
+# queryToTxt('SELECT * FROM ANIMAL;')
 
 
 def txtToTable(txt):
+    """takes as input a txt file and puts those values in a SQL table"""
     f = open(txt, 'r')
     valueList = []
     for i in f.readlines():
@@ -75,7 +77,7 @@ def txtToTable(txt):
     cursor.executemany(insert, valueList)
     conn.commit()
     count = cursor.execute('SELECT count(*) FROM ANIMAL;')
-    print(count.fetchall())
+    print('SELECT count(*) FROM ANIMAL; ', count.fetchone())
     conn.close()
 
-txtToTable('animal.txt')
+# txtToTable('animal.txt')
