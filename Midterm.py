@@ -68,10 +68,38 @@ courses = [
     ('Underwater Basket-weaving', 'PE', 6)
 ]
 grades = [
-    ('Databases for Analytics', 'Billy Bob', 4.0),
-    ('Advanced Machine Learning', 'Jen Aniston', 3.0),
-    ('Biochemistry', 'Matt Damon', 3.5),
-    ('Biochemistry', 'Tina Fey', None),
-    ('Databases for Analytics', 'Jen Aniston', None),
-
+    ('Databases for Analytics', 111111, 4.0),
+    ('Advanced Machine Learning', 222222, 3.0),
+    ('Biochemistry', 333333, 3.5),
+    ('Biochemistry', 444444, None),
+    ('Databases for Analytics', 222222, None),
+    ('Advanced Machine Learning', 111111, None),
+    ('Biochemistry', 111111, 2.0),
+    ('Databases for Analytics', 444444, 3.0),
+    ('Advanced Machine Learning', 333333, 2.5),
+    ('Biochemistry', 222222, 4.0)
 ]
+
+cursor.executemany('INSERT INTO Student VALUES(?, ?, ?, ?);', students)
+cursor.executemany('INSERT INTO Course VALUES(?, ?, ?);', courses)
+cursor.executemany('INSERT INTO Grade VALUES(?, ?, ?);', grades)
+
+view = ''' CREATE VIEW AllCols AS
+    SELECT Student.StudentID, Name, Address, GradYear, Course.CName, CGrade, Department, Credits
+    FROM Student LEFT OUTER JOIN Grade ON Student.StudentID = Grade.StudentID
+    LEFT OUTER JOIN Course ON Course.CName = Grade.CName
+    UNION
+    SELECT Student.StudentID, Name, Address, GradYear, Course.CName, CGrade, Department, Credits
+    FROM Course LEFT OUTER JOIN Grade ON Course.CName = Grade.CName
+    LEFT OUTER JOIN Student ON Grade.StudentID = Student.StudentID'''
+
+cursor.execute(view)
+AllCols = cursor.execute('SELECT * FROM AllCols;').fetchall()
+# for i in cursor.execute('SELECT * FROM AllCols;').fetchall():
+#     print(i)
+# cursor.execute('DROP VIEW AllCols;')
+
+file = open('midterm.txt', 'w')
+for i in AllCols:
+    file.write(str(i) + '\n')
+file.close()
