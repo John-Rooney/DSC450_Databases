@@ -1,13 +1,13 @@
-(None, None, None, None, 'Underwater Basket-weaving', None, 'PE', 6)
-(111111, 'Billy Bob', '123 Main St', 2014, 'Advanced Machine Learning', None, 'DSC', 4)
-(111111, 'Billy Bob', '123 Main St', 2014, 'Biochemistry', 2, 'CHE', 3)
-(111111, 'Billy Bob', '123 Main St', 2014, 'Databases for Analytics', 4, 'DSC', 4)
-(222222, 'Jen Aniston', '456 Drewery Lane', 2015, 'Advanced Machine Learning', 3, 'DSC', 4)
-(222222, 'Jen Aniston', '456 Drewery Lane', 2015, 'Biochemistry', 4, 'CHE', 3)
-(222222, 'Jen Aniston', '456 Drewery Lane', 2015, 'Databases for Analytics', None, 'DSC', 4)
-(333333, 'Matt Damon', '789 Wall St', 2015, 'Advanced Machine Learning', 2.5, 'DSC', 4)
-(333333, 'Matt Damon', '789 Wall St', 2015, 'Biochemistry', 3.5, 'CHE', 3)
-(444444, 'Tina Fey', '1010 Locust St', 2016, 'Biochemistry', None, 'CHE', 3)
-(444444, 'Tina Fey', '1010 Locust St', 2016, 'Databases for Analytics', 3, 'DSC', 4)
-(444444, 'Tina Fey', '1010 Locust St', 2016, 'Databases for Analytics', 3, 'DSC', 6)
-(555555, 'Will Smith', '666 Broken Blvd', 2014, None, None, None, None)
+None, None, None, None, 'Underwater Basket-weaving', None, 'PE', 6
+111111, 'Billy Bob', '123 Main St', 2014, 'Advanced Machine Learning', None, 'DSC', 4
+111111, 'Billy Bob', '123 Main St', 2014, 'Biochemistry', 2, 'CHE', 3
+111111, 'Billy Bob', '123 Main St', 2014, 'Databases for Analytics', 4, 'DSC', 4
+222222, 'Jen Aniston', '456 Drewery Lane', 2015, 'Advanced Machine Learning', 3, 'DSC', 4
+222222, 'Jen Aniston', '456 Drewery Lane', 2015, 'Biochemistry', 4, 'CHE', 3
+222222, 'Jen Aniston', '456 Drewery Lane', 2015, 'Databases for Analytics', None, 'DSC', 4
+333333, 'Matt Damon', '789 Wall St', 2015, 'Advanced Machine Learning', 2.5, 'DSC', 4
+333333, 'Matt Damon', '789 Wall St', 2015, 'Biochemistry', 3.5, 'CHE', 3
+444444, 'Tina Fey', '1010 Locust St', 2016, 'Biochemistry', None, 'CHE', 3
+444444, 'Tina Fey', '1010 Locust St', 2016, 'Databases for Analytics', 3, 'DSC', 4
+444444, 'Tina Fey', '1010 Locust St', 2016, 'Databases for Analytics', 3, 'DSC', 6
+555555, 'Will Smith', '666 Broken Blvd', 2014, None, None, None, None

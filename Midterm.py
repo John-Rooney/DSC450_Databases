@@ -101,5 +101,20 @@ AllCols = cursor.execute('SELECT * FROM AllCols;').fetchall()
 
 file = open('midterm.txt', 'w')
 for i in AllCols:
-    file.write(str(i) + '\n')
+    file.write(str(i)[1:-1] + '\n')
 file.close()
+
+file = open('midterm.txt', 'r')
+data = file.readlines()
+file.close()
+
+dict = {}
+for i in data:
+    values = i.replace('\'', '').strip().split(', ')
+    if values[-2] not in dict.keys():
+        dict[values[-2]] = values[-1]
+    elif values[-2] in dict.keys():
+        if dict[values[-2]] != values[-1]:
+            print('Error: CName -> Credits Not Consistent')
+            print(i)
+
