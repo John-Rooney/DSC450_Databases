@@ -9,5 +9,4 @@ None, None, None, None, 'Underwater Basket-weaving', None, 'PE', 6
 333333, 'Matt Damon', '789 Wall St', 2015, 'Biochemistry', 3.5, 'CHE', 3
 444444, 'Tina Fey', '1010 Locust St', 2016, 'Biochemistry', None, 'CHE', 3
 444444, 'Tina Fey', '1010 Locust St', 2016, 'Databases for Analytics', 3, 'DSC', 4
-444444, 'Tina Fey', '1010 Locust St', 2016, 'Databases for Analytics', 3, 'DSC', 6
 555555, 'Will Smith', '666 Broken Blvd', 2014, None, None, None, None

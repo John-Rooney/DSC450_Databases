@@ -3,12 +3,11 @@ import sqlite3
 conn = sqlite3.connect('dsc450.db')
 cursor = conn.cursor()
 
-cursor.execute('DROP TABLE Grade;')
-cursor.execute('DROP TABLE Course;')
-cursor.execute('DROP TABLE Student;')
-
-conn.commit()
-conn.close()
+# cursor.execute('DROP TABLE Grade;')
+# cursor.execute('DROP TABLE Course;')
+# cursor.execute('DROP TABLE Student;')
+# conn.commit()
+# conn.close()
 
 createStudent = """
 CREATE TABLE Student(
@@ -96,9 +95,31 @@ view = ''' CREATE VIEW AllCols AS
 
 cursor.execute(view)
 AllCols = cursor.execute('SELECT * FROM AllCols;').fetchall()
-# for i in cursor.execute('SELECT * FROM AllCols;').fetchall():
-#     print(i)
-# cursor.execute('DROP VIEW AllCols;')
+cursor.execute('DROP VIEW AllCols;')
+
+# Q1
+for i in cursor.execute('''SELECT StudentID, Name FROM Student
+WHERE GradYear BETWEEN (SELECT MIN(GradYear) FROM Student)
+AND ((SELECT MIN(GradYear) FROM Student) + 4);''').fetchall():
+    print(i)
+# Q2
+for i in cursor.execute('''SELECT Name, CName FROM Student LEFT OUTER JOIN Grade
+ON Student.StudentID = Grade.StudentID
+WHERE Name LIKE "% Muriel %"
+ORDER BY CGrade;''').fetchall():
+    print(i)
+# Q3
+for i in cursor.execute('''SELECT Name, GradYear FROM Student LEFT OUTER JOIN Grade 
+ON Student.StudentID = Grade.StudentID
+WHERE (SELECT COUNT(*) FROM Grade WHERE CGRADE IS NULL GROUP BY StudentID)
+IN (0, 1, 2) GROUP BY Name;''').fetchall():
+    print(i)
+# Q4
+cursor.execute('''UPDATE Student SET GradYear = GradYear + 1
+WHERE Address LIKE "%Chicago%";''')
+# Q5
+cursor.execute('''ALTER TABLE Course
+ADD Chair VARCHAR2(25);''')
 
 # 4. b
 file = open('midterm.txt', 'w')
@@ -145,10 +166,3 @@ for key, value in dict.items():
         print(key, 'Null')
     else:
         print(key, min(years))
-
-
-# conn.row_factory = sqlite3.Row
-# cursor = conn.cursor()
-# tuples = []
-# for i in cursor.execute('SELECT * FROM AllCols').fetchall():
-#     tuples.append(tuple(i))
