@@ -2,13 +2,13 @@ import numpy as np
 import pandas as pd
 
 ### Part 1 ###
-
+# A.
 def randx(x): # 1. A
     return np.random.uniform(low=21, high=100, size=x)
-
+# B.
 lst = pd.Series(randx(50)) # 1. B
 lst[lst < 33].shape
-
+# C.
 arr = np.array(lst).reshape(5, 10)
 arr = np.where(arr > 50, 50, arr) # 1. C
 
