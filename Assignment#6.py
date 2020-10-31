@@ -117,3 +117,21 @@ for i in tweets:
 # for key, value in dict.items():
 #     if value > 1:
 #         print(key, value)
+
+### Part 3 ###
+# A. - SQL Code Below
+'''CREATE OR REPLACE TRIGGER maxCourseNum
+BEFORE UPDATE OR INSERT ON course
+FOR EACH ROW
+WHEN (new.CourseNr >= 599)
+BEGIN
+    :new.CourseNr := 598;
+    dbms_output.put_line('Ammended CourseNr to 598');
+END;
+/'''
+
+# B.
+import re
+card = '1234 5678 9012 3456'
+CC = re.compile(r'\d{4} ?\d{4} ?\d{4} ?\d{4}')
+CC.findall(card)
