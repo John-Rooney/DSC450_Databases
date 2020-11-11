@@ -143,12 +143,23 @@ for line in raw.readlines():
     except:
         continue
 e = time.time()
-# time = 3.61 seconds, 1751 tweets
+# time = 3.61 seconds, 1752 tweets
 
 # C.
 s = time.time()
 result = cursor.execute('SELECT COUNT(DISTINCT in_reply_to_user_id) FROM Tweets;').fetchall()
 e = time.time()
-# 0.007 seconds, Count = 1746
+# 0.007 seconds, count = 1746
 
 # D.
+s = time.time()
+raw = urllib.request.urlopen('http://rasinsrv07.cstcis.cti.depaul.edu/CSC455/Assignment5.txt')
+distinct = set()
+for line in raw.readlines():
+    try:
+        tweet = json.loads(line.decode('utf8'))
+        distinct.add(tweet['in_reply_to_user_id'])
+    except:
+        continue
+e = time.time()
+# time = 4.34 seconds, count = 1747
