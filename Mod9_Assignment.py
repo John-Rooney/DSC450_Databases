@@ -3,6 +3,7 @@ import json
 import sqlite3
 import time
 import re
+import matplotlib.pyplot as plt
 
 conn = sqlite3.connect('dsc450.db')
 cursor = conn.cursor()
@@ -163,3 +164,5 @@ for line in raw.readlines():
         continue
 e = time.time()
 # time = 4.34 seconds, count = 1747
+
+### TEST ###
