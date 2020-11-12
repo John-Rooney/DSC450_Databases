@@ -119,9 +119,9 @@ for i in tweets:
     except Exception as E:
         insertErrors.append([i, E])
 
-# print(cursor.execute('SELECT COUNT(*) FROM User;').fetchone())
-# print(cursor.execute('SELECT COUNT(*) FROM Tweets;').fetchone())
-# print(cursor.execute('SELECT COUNT(*) FROM Geo;').fetchone())
+print(cursor.execute('SELECT COUNT(*) FROM User;').fetchone())
+print(cursor.execute('SELECT COUNT(*) FROM Tweets;').fetchone())
+print(cursor.execute('SELECT COUNT(*) FROM Geo;').fetchall())
 
 # Part 1
 # A.
@@ -165,4 +165,26 @@ for line in raw.readlines():
 e = time.time()
 # time = 4.34 seconds, count = 1747
 
-### TEST ###
+# E.
+tweetLen = []
+userLen = []
+for i in tweets[:50]:
+    tweetLen.append(len(i['text']))
+    userLen.append(len(i['user']['screen_name']))
+
+fig, ax = plt.subplots()
+ax.scatter(userLen, tweetLen)
+ax.set_xlabel('User Name Length')
+ax.set_ylabel('Tweet Length')
+ax.set_title('User Name Length vs. Tweet Length')
+fig.savefig('twitter plot.png')
+
+# Part 2
+# A.
+cursor.execute('CREATE INDEX UID_index on Tweets(user_id);')
+
+# B.
+cursor.execute('CREATE INDEX multi_index on user(friends_count, screen_name);')
+
+# C.
+cursor.execute('CREATE TABLE mv as SELECT * FROM Tweets WHERE id_str LIKE "%777%" OR id_str LIKE "%88%";')
