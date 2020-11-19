@@ -70,3 +70,130 @@ for tweet in tweets:
 # ['geo']['type']
 # tweets 5
 # schema 25
+
+# C.
+conn = sqlite3.connect('dsc450.db')
+cursor = conn.cursor()
+
+createUserTbl = '''
+CREATE TABLE user(
+    id NUMBER(16),
+    name VARCHAR2(25),
+    screen_name VARCHAR2(25),
+    description VARCHAR2(30),
+    friends_count NUMBER(5),
+
+    CONSTRAINT User_PK
+        PRIMARY KEY (id)
+)
+'''
+createTweetsTbl = """
+CREATE TABLE Tweets
+(
+    created_at VARCHAR2(30),
+    id_str VARCHAR2(30) PRIMARY KEY,
+    text VARCHAR2(140),
+    source VARCHAR2(60),
+    in_reply_to_user_id VARCHAR2(30),
+    in_reply_to_screen_name VARCHAR2(30),
+    in_reply_to_status_id NUMBER(18),
+    retweet_count NUMBER(8),
+    contributors VARCHAR2(30),
+    user_id NUMBER(16),
+
+    CONSTRAINT Tweet_FK
+        FOREIGN KEY (user_id)
+            REFERENCES user(id)
+);
+"""
+createGeoTbl = """
+CREATE TABLE Geo(
+    id_str VARCHAR2(30),
+    type VARCHAR2(25),
+    longitude NUMBER,
+    latitude NUMBER,
+
+    CONSTRAINT Geo_PK
+        PRIMARY KEY (id_str),
+
+    CONSTRAINT Geo_FK
+        FOREIGN KEY (id_str)
+            REFERENCES Tweets(id_str)
+);"""
+
+cursor.execute(createUserTbl)
+cursor.execute(createTweetsTbl)
+cursor.execute(createGeoTbl)
+
+cursor.execute('DROP TABLE tweets;')
+cursor.execute('DROP TABLE user;')
+cursor.execute('DROP TABLE Geo;')
+conn.commit()
+conn.close()
+
+tweets = []
+start = time.time()
+with urllib.request.urlopen('http://rasinsrv07.cstcis.cti.depaul.edu/CSC455/OneDayOfTweets.txt') as t:
+    for i in range(500_000):
+        tweet = t.readline()
+        try:
+            print(i)
+            tweets.append(json.loads(tweet.decode('utf8')))
+        except:
+            continue
+
+insertTweets = 'INSERT INTO Tweets VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+insertUser = 'INSERT INTO User VALUES(?, ?, ?, ?, ?);'
+insertGeo = 'INSERT INTO Geo VALUES(?, ?, ?, ?);'
+insertErrors = []
+
+for idx, i in enumerate(tweets):
+    one = i['created_at']
+    two = i['id_str']
+    three = i['text']
+    four = i['source']
+    five = i['in_reply_to_user_id']
+    six = i['in_reply_to_screen_name']
+    seven = i['in_reply_to_status_id']
+    eight = i['retweet_count']
+    nine = i['contributors']
+    ten = i['user']['id']
+    if i['geo'] != None:
+        eleven, sixteen = i['geo']['coordinates']
+        seventeen = i['geo']['type']
+    else:
+        eleven, sixteen, seventeen = (None, None, None)
+    twelve = i['user']['name']
+    thirteen = i['user']['screen_name']
+    fourteen = i['user']['description']
+    fifteen = i['user']['friends_count']
+    values = [one, two, three, four, five, six, seven, eight, nine, ten]
+    values2 = [ten, twelve, thirteen, fourteen, fifteen]
+    values3 = [two, seventeen, eleven, sixteen]
+    try:
+        cursor.execute(insertTweets, values)  # Tweets table
+    except Exception as E:
+        insertErrors.append([i, E])
+    try:
+        cursor.execute(insertUser, values2)  # User table
+    except Exception as E:
+        insertErrors.append([i, E])
+    try:
+        if i['geo'] != None:
+            cursor.execute(insertGeo, values3)  # Geo table
+    except Exception as E:
+        insertErrors.append([i, E])
+    print(idx)
+
+end = time.time()
+print(end - start)
+
+# 25.712281227111816 seconds for 50,000 tweets; 49,973 Tweets, 48,371 User, 1,121 Geo
+# 38.08688259124756 seconds for 100,000 tweets; 99,946 Tweets, 95,103 User, 2,253 Geo
+# 172.37015652656555 seconds for 500,000 tweets; 499,776 Tweets, 447,304 User, 11,983 Geo
+
+print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone())
+print(cursor.execute('SELECT count(*) FROM User;').fetchone())
+print(cursor.execute('SELECT count(*) FROM Geo;').fetchone())
+
+# D.
