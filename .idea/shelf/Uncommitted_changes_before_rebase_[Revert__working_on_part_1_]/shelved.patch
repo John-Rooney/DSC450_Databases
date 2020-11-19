@@ -1,0 +1,6 @@
+Index: .gitignore
+===================================================================
+--- .gitignore	(revision 9fe1a17dde359366f90d0e20a6f26b6abada25ca)
++++ .gitignore	(revision 9fe1a17dde359366f90d0e20a6f26b6abada25ca)
+@@ -1,1 +0,0 @@
+-/final_tweetsCopy.txt

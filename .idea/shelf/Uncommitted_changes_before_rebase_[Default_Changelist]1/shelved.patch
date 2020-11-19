@@ -1,0 +1,24 @@
+Index: DSC450 Final.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import urllib.request\r\nimport json\r\nimport sqlite3\r\nimport time\r\nimport re\r\nimport matplotlib.pyplot as plt\r\nimport pandas as pd\r\n\r\n### Part 1 ###\r\n# A.\r\nnumTweets = [50_000, 100_000, 500_000]\r\nfor num in numTweets:\r\n    start=time.time()\r\n    with urllib.request.urlopen('http://rasinsrv07.cstcis.cti.depaul.edu/CSC455/OneDayOfTweets.txt') as t:\r\n        with open('final_tweets.txt', 'w') as f:\r\n            for i in range(num):\r\n                try:\r\n                    tweet = t.readline()\r\n                    f.write(tweet.decode('utf-8'))\r\n                except:\r\n                    continue\r\n    end = time.time()\r\n    print(end-start, num)\r\n# 17.754178762435913 seconds for 50,000 tweets\r\n# 32.30730128288269 seconds for 100,000 tweets\r\n# 143.31574988365173 seconds for 500,000 tweets\r\n\r\n# B.\r\ntweets=[]\r\nwith open('final_tweets.txt', 'r') as f:\r\n    for line in f.readlines():\r\n        tweets.append(json.loads(line))\r\n\r\ncols = ['created_at', 'id_str', 'text', 'source', 'in_reply_to_user_id', 'in_reply_to_screen_name', 'in_reply_to_status_id', 'contributors']\r\ncolLen = [0, 0, 0, 0, 0, 0, 0, 0]\r\n\r\n# User\r\ncols2 = ['name', 'screen_name', 'description']\r\ncolLen2 = [0, 0, 0]\r\n\r\n# geo\r\ncolLen3 = 0\r\n\r\nfor tweet in tweets:\r\n    for idx, col in enumerate(cols):\r\n        if tweet[col] != None:\r\n            if len(str(tweet[col])) > colLen[idx]:\r\n                colLen[idx] = len(str(tweet[col]))\r\n\r\n    for idx, col in enumerate(cols2):\r\n        if tweet['user'][col] != None:\r\n            if len(str(tweet['user'][col])) > colLen2[idx]:\r\n                colLen2[idx] = len(str(tweet['user'][col]))\r\n\r\n    if tweet['geo'] != None:\r\n        if len(str(tweet['geo']['type'])) > colLen3:\r\n            colLen3 = len(str(tweet['geo']['type']))\r\n\r\n# ([30, 18, 434, 173, 10, 15, 18, 0], [20, 15, 160], 5)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- DSC450 Final.py	(revision c0e1874e371d7b3e438e91e8bba9eba98c33bb0f)
++++ DSC450 Final.py	(date 1605816068416)
+@@ -56,4 +56,11 @@
+         if len(str(tweet['geo']['type'])) > colLen3:
+             colLen3 = len(str(tweet['geo']['type']))
+ 
+-# ([30, 18, 434, 173, 10, 15, 18, 0], [20, 15, 160], 5)
+\ No newline at end of file
++#  Max Lengths
++# ['created_at', 'id_str', 'text', 'source', 'in_reply_to_user_id', 'in_reply_to_screen_name', 'in_reply_to_status_id', 'contributors']
++# Max in tweets: [30, 18, 434, 173, 10, 15, 18, 0]
++# Data type size: []
++# ['name', 'screen_name', 'description']
++# [20, 15, 160]
++# ['geo']['type']
++# 5
+\ No newline at end of file
