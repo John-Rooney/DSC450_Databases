@@ -140,7 +140,7 @@ with urllib.request.urlopen('http://rasinsrv07.cstcis.cti.depaul.edu/CSC455/OneD
             print(i)
             tweets.append(json.loads(tweet.decode('utf8')))
         except:
-            continue
+            pass
 
 insertTweets = 'INSERT INTO Tweets VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
 insertUser = 'INSERT INTO User VALUES(?, ?, ?, ?, ?);'
@@ -172,17 +172,17 @@ for idx, i in enumerate(tweets):
     values3 = [two, seventeen, eleven, sixteen]
     try:
         cursor.execute(insertTweets, values)  # Tweets table
-    except Exception as E:
-        insertErrors.append([i, E])
+    except:
+        pass
     try:
         cursor.execute(insertUser, values2)  # User table
-    except Exception as E:
-        insertErrors.append([i, E])
+    except:
+        pass
     try:
         if i['geo'] != None:
             cursor.execute(insertGeo, values3)  # Geo table
-    except Exception as E:
-        insertErrors.append([i, E])
+    except:
+        pass
     print(idx)
 
 end = time.time()
@@ -197,3 +197,57 @@ print(cursor.execute('SELECT count(*) FROM User;').fetchone())
 print(cursor.execute('SELECT count(*) FROM Geo;').fetchone())
 
 # D.
+start = time.time()
+tweets = []
+with open('final_tweets.txt', 'r') as f:
+    for tweet in f:
+        try:
+            tweets.append(json.loads(tweet))
+        except:
+            pass
+
+for i in tweets:
+    one = i['created_at']
+    two = i['id_str']
+    three = i['text']
+    four = i['source']
+    five = i['in_reply_to_user_id']
+    six = i['in_reply_to_screen_name']
+    seven = i['in_reply_to_status_id']
+    eight = i['retweet_count']
+    nine = i['contributors']
+    ten = i['user']['id']
+    if i['geo'] != None:
+        eleven, sixteen = i['geo']['coordinates']
+        seventeen = i['geo']['type']
+    else:
+        eleven, sixteen, seventeen = (None, None, None)
+    twelve = i['user']['name']
+    thirteen = i['user']['screen_name']
+    fourteen = i['user']['description']
+    fifteen = i['user']['friends_count']
+    values = [one, two, three, four, five, six, seven, eight, nine, ten]
+    values2 = [ten, twelve, thirteen, fourteen, fifteen]
+    values3 = [two, seventeen, eleven, sixteen]
+    try:
+        cursor.execute(insertTweets, values)  # Tweets table
+    except:
+        pass
+    try:
+        cursor.execute(insertUser, values2)  # User table
+    except:
+        pass
+    try:
+        if i['geo'] != None:
+            cursor.execute(insertGeo, values3)  # Geo table
+    except:
+        pass
+
+end = time.time()
+print(end - start)
+
+# 17.29100012779236 seconds for 207,543 tweets in file; 207,447 Tweets, 191,001 User, 5,829 Geo
+
+print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone())
+print(cursor.execute('SELECT count(*) FROM User;').fetchone())
+print(cursor.execute('SELECT count(*) FROM Geo;').fetchone())
