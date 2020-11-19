@@ -58,11 +58,11 @@ cursor.execute(createUserTbl)
 cursor.execute(createTweetsTbl)
 cursor.execute(createGeoTbl)
 
-cursor.execute('DROP TABLE tweets;')
-cursor.execute('DROP TABLE user;')
-cursor.execute('DROP TABLE Geo;')
-conn.commit()
-conn.close()
+# cursor.execute('DROP TABLE tweets;')
+# cursor.execute('DROP TABLE user;')
+# cursor.execute('DROP TABLE Geo;')
+# conn.commit()
+# conn.close()
 
 raw = urllib.request.urlopen('http://rasinsrv07.cstcis.cti.depaul.edu/CSC455/Assignment5.txt')
 tweets = []
@@ -115,7 +115,7 @@ for i in tweets:
     except Exception as E:
         insertErrors.append([i, E])
     try:
-        cursor.execute(insertGeo, values3)  # User table
+        cursor.execute(insertGeo, values3)  # Geo table
     except Exception as E:
         insertErrors.append([i, E])
 
