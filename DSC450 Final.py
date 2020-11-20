@@ -298,19 +298,19 @@ while count <= iter:
         values.append([one, two, three, four, five, six, seven, eight, nine, ten])
         values2.append([ten, twelve, thirteen, fourteen, fifteen])
         values3.append([two, seventeen, eleven, sixteen])
-        try:
-            cursor.executemany(insertTweets, values)  # Tweets table
-        except Exception as E:
-            errors.append([E, i])
-        try:
-            cursor.executemany(insertUser, values2)  # User table
-        except Exception as E:
-            errors.append([E, i])
-        try:
-            if i['geo'] != None:
-                cursor.executemany(insertGeo, values3)  # Geo table
-        except Exception as E:
-            errors.append([E, i])
+    try:
+        cursor.executemany(insertTweets, values)  # Tweets table
+    except Exception as E:
+        errors.append([E, i])
+    try:
+        cursor.executemany(insertUser, values2)  # User table
+    except Exception as E:
+        errors.append([E, i])
+    try:
+        if i['geo'] != None:
+            cursor.executemany(insertGeo, values3)  # Geo table
+    except Exception as E:
+        errors.append([E, i])
     count += 1
     if count < iter:
         start += 1000
@@ -329,7 +329,6 @@ stop = time.time()
 print(stop - begin)
 
 # 17.29100012779236 seconds for 207,543 tweets in file; 207,447 Tweets, 191,001 User, 5,829 Geo
-
 print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone())
 print(cursor.execute('SELECT count(*) FROM User;').fetchone())
 print(cursor.execute('SELECT count(*) FROM Geo;').fetchone())
