@@ -251,3 +251,85 @@ print(end - start)
 print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone())
 print(cursor.execute('SELECT count(*) FROM User;').fetchone())
 print(cursor.execute('SELECT count(*) FROM Geo;').fetchone())
+
+# E.
+begin = time.time()
+tweets = []
+errors = []
+with open('final_tweets.txt', 'r') as f:
+    for idx, tweet in enumerate(f):
+        try:
+            tweets.append(json.loads(tweet))
+            print(idx)
+        except:
+            pass
+
+last = len(tweets)
+remain = last % 1000
+iter = last // 1000
+
+count = 0
+start = 0
+end = 1000
+values = []
+values2 = []
+values3 = []
+while count <= iter:
+    for i in tweets[start:end]:
+        one = i['created_at']
+        two = i['id_str']
+        three = i['text']
+        four = i['source']
+        five = i['in_reply_to_user_id']
+        six = i['in_reply_to_screen_name']
+        seven = i['in_reply_to_status_id']
+        eight = i['retweet_count']
+        nine = i['contributors']
+        ten = i['user']['id']
+        if i['geo'] != None:
+            eleven, sixteen = i['geo']['coordinates']
+            seventeen = i['geo']['type']
+        else:
+            eleven, sixteen, seventeen = (None, None, None)
+        twelve = i['user']['name']
+        thirteen = i['user']['screen_name']
+        fourteen = i['user']['description']
+        fifteen = i['user']['friends_count']
+        values.append([one, two, three, four, five, six, seven, eight, nine, ten])
+        values2.append([ten, twelve, thirteen, fourteen, fifteen])
+        values3.append([two, seventeen, eleven, sixteen])
+        try:
+            cursor.executemany(insertTweets, values)  # Tweets table
+        except Exception as E:
+            errors.append([E, i])
+        try:
+            cursor.executemany(insertUser, values2)  # User table
+        except Exception as E:
+            errors.append([E, i])
+        try:
+            if i['geo'] != None:
+                cursor.executemany(insertGeo, values3)  # Geo table
+        except Exception as E:
+            errors.append([E, i])
+    count += 1
+    if count < iter:
+        start += 1000
+        end += 1000
+    else:
+        start = last - remain
+        end = last
+    values = []
+    values2 = []
+    values3 = []
+    print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone(), 'Tweets')
+    print(cursor.execute('SELECT count(*) FROM User;').fetchone(), 'User')
+    print(cursor.execute('SELECT count(*) FROM Geo;').fetchone(), 'Geo')
+
+stop = time.time()
+print(stop - begin)
+
+# 17.29100012779236 seconds for 207,543 tweets in file; 207,447 Tweets, 191,001 User, 5,829 Geo
+
+print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone())
+print(cursor.execute('SELECT count(*) FROM User;').fetchone())
+print(cursor.execute('SELECT count(*) FROM Geo;').fetchone())
