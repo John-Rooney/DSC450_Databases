@@ -206,7 +206,7 @@ with open('final_tweets.txt', 'r') as f:
         except:
             pass
 
-for i in tweets:
+for i in tweets[:50000]:
     one = i['created_at']
     two = i['id_str']
     three = i['text']
@@ -246,7 +246,9 @@ for i in tweets:
 end = time.time()
 print(end - start)
 
-# 17.29100012779236 seconds for 207,543 tweets in file; 207,447 Tweets, 191,001 User, 5,829 Geo
+# 16.035093069076538 seconds for 50,000 tweets; 49,977 Tweets, 47,881 User, 1,305 Geo
+# 17.02628779411316 seconds for 100,000 tweets; 99,947 Tweets, 94,045 User, 2,679 Geo
+# 17.29100012779236 seconds for 207,543 tweets; 207,447 Tweets, 191,001 User, 5,829 Geo
 
 print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone())
 print(cursor.execute('SELECT count(*) FROM User;').fetchone())
@@ -257,16 +259,15 @@ begin = time.time()
 tweets = []
 errors = []
 with open('final_tweets.txt', 'r') as f:
-    for idx, tweet in enumerate(f):
+    for tweet in f:
         try:
             tweets.append(json.loads(tweet))
-            print(idx)
         except:
             pass
 
 last = len(tweets)
 remain = last % 1000
-iter = last // 1000
+iter = 100 #last // 1000
 
 count = 0
 start = 0
@@ -321,14 +322,54 @@ while count <= iter:
     values = []
     values2 = []
     values3 = []
-    print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone(), 'Tweets')
-    print(cursor.execute('SELECT count(*) FROM User;').fetchone(), 'User')
-    print(cursor.execute('SELECT count(*) FROM Geo;').fetchone(), 'Geo')
 
 stop = time.time()
 print(stop - begin)
-
-# 17.29100012779236 seconds for 207,543 tweets in file; 207,447 Tweets, 191,001 User, 5,829 Geo
 print(cursor.execute('SELECT count(*) FROM Tweets;').fetchone())
 print(cursor.execute('SELECT count(*) FROM User;').fetchone())
 print(cursor.execute('SELECT count(*) FROM Geo;').fetchone())
+
+# 15.444014549255371 seconds for 50,000 tweets in file; 37,506 Tweets, 6,795 User, 1,000 Geo
+# 16.265013694763184 seconds for 100,000 tweets in file; 76,723 Tweets, 11,489 User, 2,143 Geo
+# 19.389507293701172 seconds for 207,543 tweets in file; 165,615 Tweets, 19,100 User, 2,769 Geo
+
+# F.
+# Plot for 1. A.
+# 17.754178762435913 seconds for 50,000 tweets
+# 32.30730128288269 seconds for 100,000 tweets
+# 143.31574988365173 seconds for 500,000 tweets
+
+plt.bar(x=['50,000', '100,000', '500,000'], height=[17.75, 32.31, 143.32], color='#5e79ff')
+plt.xlabel('Tweets Loaded')
+plt.ylabel('Seconds Elapsed')
+plt.title('1. A. Plot')
+
+# Plot for 1. C.
+# 25.712281227111816 seconds for 50,000 tweets
+# 38.08688259124756 seconds for 100,000 tweets
+# 172.37015652656555 seconds for 500,000 tweets
+
+plt.bar(x=['50,000', '100,000', '500,000'], height=[25.71, 38.1, 172.4], color='#5e79ff')
+plt.xlabel('Tweets Loaded')
+plt.ylabel('Seconds Elapsed')
+plt.title('1. C. Plot')
+
+# Plot for 1. D.
+# 16.035093069076538 seconds for 50,000 tweets
+# 17.02628779411316 seconds for 100,000 tweets
+# 17.29100012779236 seconds for 207,543 tweets
+
+plt.bar(x=['50,000', '100,000', '207,543'], height=[16.04, 17.03, 17.29], color='#5e79ff')
+plt.xlabel('Tweets Loaded')
+plt.ylabel('Seconds Elapsed')
+plt.title('1. D. Plot')
+
+# Plot for 1. E.
+# 15.444014549255371 seconds for 50,000 tweets in file; 37,506 Tweets, 6,795 User, 1,000 Geo
+# 16.265013694763184 seconds for 100,000 tweets in file; 76,723 Tweets, 11,489 User, 2,143 Geo
+# 19.389507293701172 seconds for 207,543 tweets in file; 165,615 Tweets, 19,100 User, 2,769 Geo
+
+plt.bar(x=['50,000', '100,000', '207,543'], height=[15.44, 16.27, 19.39], color='#5e79ff')
+plt.xlabel('Tweets Loaded')
+plt.ylabel('Seconds Elapsed')
+plt.title('1. E. Plot')
